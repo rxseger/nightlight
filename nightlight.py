@@ -4,6 +4,9 @@
 import spidev
 import time
 import RPi.GPIO as GPIO
+import pigpio
+
+pi = pigpio.pi() # sudo pigpiod
 
 # /dev/spidev(bus).(dev)
 SPI_BUS = 0
@@ -17,12 +20,11 @@ V_LIGHT = 0.7  # turn off when light out
 V_DARK = 0.6   # turn on when it is dark
 
 # GPIO port for nightlight
-LED_Y = 32 # G12
+#LED_Y = 32 # G12
+LED_Y_BCM = 12 # board pin #32
 
-
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BOARD) # TODO: switch to pigpio for SPI?
 GPIO.setwarnings(False)
-GPIO.setup([LED_Y], GPIO.OUT, initial=GPIO.HIGH)
 
 spi = spidev.SpiDev()
 spi.open(SPI_BUS, SPI_DEV)
@@ -41,14 +43,17 @@ def readadc(adcnum):
 	# Divisor changed from 1023 to 4095, due to 4 more bits
 	return (adcout * 3.3) / 4095
 
-def set_light(on):
-	GPIO.output(LED_Y, not on) # active-low
+# brightness: 0.0 (dark) - 1.0 (light)
+def set_light(brightness):
+	# 0-255 PWM duty cycle = 0 to 100%
+	# 1- since LED is wired active-low
+	pi.set_PWM_dutycycle(LED_Y_BCM, 255 * (1 - brightness))
 
 while True:
 	v = readadc(7)
 	#print v
 	if v > V_LIGHT:
-		set_light(False)
+		set_light(0.0)
 	elif v < V_DARK:
-		set_light(True)
+		set_light(1.0)
 	time.sleep(0.1)
