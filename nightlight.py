@@ -51,6 +51,10 @@ def set_light(brightness):
 	pi.set_PWM_dutycycle(LED_Y_BCM, 255 * (1 - brightness))
 
 is_light = True
+min_counter = 0.1
+max_counter = 0.9
+counter = max_counter
+direction = -0.05
 while True:
 	v = readadc(7)
 	#print v
@@ -64,5 +68,13 @@ while True:
 		if is_light:
 			set_light(0.0)
 		else:
-			set_light(1.0)
+			set_light(counter)
+
+
+	if not is_light:
+		counter += direction
+		if counter < min_counter or counter > max_counter:
+			direction = -direction
+		set_light(counter)
+
 	time.sleep(0.1)
