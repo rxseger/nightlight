@@ -50,7 +50,7 @@ def set_light(brightness):
 	# 1- since LED is wired active-low
 	pi.set_PWM_dutycycle(LED_Y_BCM, 255 * (1 - brightness))
 
-is_light = False
+is_light = True
 while True:
 	v = readadc(7)
 	#print v
