@@ -69,8 +69,9 @@ while True:
 	if is_light != was_light:
 		if is_light:
 			set_light(0.0)
+			counter = 0.0
 		else:
-			set_light(counter)
+			set_light(1.0)
 
 
 	if not is_light:
