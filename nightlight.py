@@ -24,6 +24,11 @@ V_DARK = 0.6   # turn on when it is dark
 #LED_Y = 32 # G12
 LED_Y_BCM = 12 # board pin #32
 
+# magnetic transducer
+BUZZER_BCM = 19 # board pin #35
+BUZZER_FREQUENCY = 2000 # Hz
+BUZZER_DUTYCYCLE = 255*0.50
+
 GPIO.setmode(GPIO.BOARD) # TODO: switch to pigpio for SPI?
 GPIO.setwarnings(False)
 
@@ -54,6 +59,14 @@ def set_light(brightness):
 	if n > 255: n = 255
 	pi.set_PWM_dutycycle(LED_Y_BCM, n)
 
+def set_buzzer(on):
+	if on:
+		pi.set_PWM_frequency(BUZZER_BCM, BUZZER_FREQUENCY)
+		pi.set_PWM_dutycycle(BUZZER_BCM, BUZZER_DUTYCYCLE)
+	else:
+		pi.set_PWM_frequency(BUZZER_BCM, 0)
+		pi.set_PWM_dutycycle(BUZZER_BCM, 0)
+
 is_light = True
 counter = 0.0
 direction = math.pi / 100
@@ -69,9 +82,11 @@ while True:
 	if is_light != was_light:
 		if is_light:
 			set_light(0.0)
+			set_buzzer(False)
 			counter = 0.0
 		else:
 			set_light(1.0)
+			set_buzzer(False)
 
 
 	if not is_light:
