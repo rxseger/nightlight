@@ -26,7 +26,8 @@ LED_Y_BCM = 12 # board pin #32
 
 # magnetic transducer
 BUZZER_BCM = 19 # board pin #35
-BUZZER_FREQUENCY = 2000 # Hz
+#BUZZER_FREQUENCY = 2000 # Hz, try: 8000, 4000, 2000 (rated), 1000, 800, 500, 200, 100, 80, 50, 10
+BUZZER_FREQUENCY = 10 # Hz
 BUZZER_DUTYCYCLE = 255*0.50
 BUZZER_DURATION = 0.1 # seconds
 
