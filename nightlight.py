@@ -28,6 +28,7 @@ LED_Y_BCM = 12 # board pin #32
 BUZZER_BCM = 19 # board pin #35
 BUZZER_FREQUENCY = 2000 # Hz
 BUZZER_DUTYCYCLE = 255*0.50
+BUZZER_DURATION = 0.1 # seconds
 
 GPIO.setmode(GPIO.BOARD) # TODO: switch to pigpio for SPI?
 GPIO.setwarnings(False)
@@ -70,6 +71,7 @@ def set_buzzer(on):
 is_light = True
 counter = 0.0
 direction = math.pi / 100
+buzzer_started = None
 while True:
 	v = readadc(7)
 	#print v
@@ -82,11 +84,15 @@ while True:
 	if is_light != was_light:
 		if is_light:
 			set_light(0.0)
-			set_buzzer(False)
 			counter = 0.0
 		else:
 			set_light(1.0)
-			set_buzzer(False)
+		buzzer_started = time.time()
+		set_buzzer(True)
+
+	if buzzer_started and time.time() - buzzer_started > BUZZER_DURATION:
+		set_buzzer(False)
+		buzzer_stated = None
 
 
 	if not is_light:
