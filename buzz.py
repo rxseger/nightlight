@@ -5,6 +5,7 @@
 import time
 import math
 import pigpio
+import sys
 
 pi = pigpio.pi() # sudo pigpiod
 
@@ -23,6 +24,12 @@ def set_buzzer(on):
 		pi.set_PWM_frequency(BUZZER_BCM, 0)
 		pi.set_PWM_dutycycle(BUZZER_BCM, 0)
 
+if len(sys.argv) > 1:
+	print "turning off"
+	set_buzzer(False)
+	raise SystemExit
+
+print "buzzing"
 on = True
 while True:
 	set_buzzer(on)
