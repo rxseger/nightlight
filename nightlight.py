@@ -17,7 +17,7 @@ SPI_DEV = 0
 ADC_CHANNEL = 7
 
 # voltages if greater than or less than, recognize as light or dark (in between, no change)
-V_LIGHT = 0.8  # turn off when light out
+V_LIGHT = 0.9  # turn off when (very!) light out
 V_DARK = 0.1   # turn on when it is dark
 
 # GPIO port for nightlight
